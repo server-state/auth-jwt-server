@@ -4,7 +4,6 @@
   "description": "Basic JWT server for Server State servers",
   "main": "index.js",
   "types": "index.d.ts",
-  "private": true,
   "scripts": {
     "test": "jest --coverage",
     "lint": "echo TODO",
