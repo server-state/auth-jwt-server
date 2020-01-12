@@ -4,7 +4,7 @@ export interface SWTServerConfig {
 
     issuerName: string;
 
-    getUsersGroups(username: string): string[];
+    getUsersGroups(username: string): Promise<string[]>;
     authenticate(username: string, password: string): Promise<boolean>;
 
 }

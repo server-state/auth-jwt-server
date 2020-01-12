@@ -3,6 +3,12 @@ import {JWTPayload} from "./JWTPayload";
 import jwt, {Secret} from 'jsonwebtoken';
 import {generate} from 'selfsigned';
 
+/**
+ * A basic JWT Server and Client implementation that can get used in the server-state ecosystem
+ *
+ * @copyright server-state
+ * @author Pablo Klaschka
+ */
 export default class SWTServer {
     private readonly publicKey: Secret;
     private readonly privateKey: Secret;
@@ -19,8 +25,13 @@ export default class SWTServer {
         }
     }
 
-    public setup(express: import('express').IRouter, authURL: string): void {
-        express.post(authURL, async (req, res: import('express').Response) => {
+    /**
+     * Sets up a token fetching route in a passed Express app
+     * @param router express app/Router in which the path should get set up
+     * @param authURL path of the token fetching endpoint, relative from Routers route
+     */
+    public setup(router: import('express').IRouter, authURL: string): void {
+        router.post(authURL, async (req, res: import('express').Response) => {
             const username = req.body.username;
             const password = req.body.password;
 
@@ -36,13 +47,23 @@ export default class SWTServer {
         });
     }
 
-    private encode(value: JWTPayload): string {
-        return jwt.sign(value, this.privateKey, {
+    /**
+     * Encodes a JWT payload
+     * @param payload decoded JWT payload
+     * @returns encoded JWT payload
+     */
+    private encode(payload: JWTPayload): string {
+        return jwt.sign(payload, this.privateKey, {
             issuer: this.config.issuerName,
             algorithm: 'RS256'
         });
     }
 
+    /**
+     * Decodes an encoded JWT token
+     * @param encoded encoded JWT token
+     * @returns decoded JWT payload
+     */
     private decode(encoded: string): JWTPayload {
         return jwt.verify(encoded, this.publicKey, {
             issuer: this.config.issuerName,
@@ -50,6 +71,12 @@ export default class SWTServer {
         }) as JWTPayload;
     }
 
+    /**
+     * Authenticates a user and resolves with his JWT token
+     * @param username user's username
+     * @param password user's password
+     * @throws if the user is unauthorized
+     */
     public async authenticate(username: string, password: string): Promise<string> {
         // If !authenticated, throw => reject
         if (!await this.config.authenticate(username, password))
@@ -66,12 +93,12 @@ export default class SWTServer {
      * @param jwtToken The JWT Payload Token
      * @returns the authorized groups. `['guest']`, if no groups apply
      */
-    public getAuthorizedGroups(jwtToken: string): string[] {
+    public async getAuthorizedGroups(jwtToken: string): Promise<string[]> {
         try {
             const jwt = this.decode(jwtToken);
 
             let authorizedGroups: string[] = (jwt && jwt.user) ?
-                this.config.getUsersGroups(jwt.user) :
+                await this.config.getUsersGroups(jwt.user) :
                 ['guest'];
 
             if (authorizedGroups.length > 0) {
