@@ -1,5 +1,5 @@
 {
-  "name": "auth-jwt-server",
+  "name": "@server-state/auth-jwt-server",
   "version": "0.1.0",
   "description": "Basic JWT server for Server State servers",
   "main": "index.js",
@@ -7,19 +7,21 @@
   "private": true,
   "scripts": {
     "test": "jest --coverage",
-    "lint": "eslint ./src ./tests",
-    "build": "rollup -c"
+    "lint": "echo TODO",
+    "build": "rollup -c",
+    "prepublish": "npm run-script build",
+    "preversion": "npm run-script build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/server-state/template-module.git"
+    "url": "git+https://github.com/server-state/auth-jwt-server.git"
   },
   "author": "server-state",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/server-state/template-module/issues"
+    "url": "https://github.com/server-state/auth-jwt-server/issues"
   },
-  "homepage": "https://github.com/server-state/template-module#readme",
+  "homepage": "https://github.com/server-state/auth-jwt-server#readme",
   "devDependencies": {
     "@server-state/types": "^0.1.1",
     "@types/express": "^4.17.2",

@@ -10,7 +10,13 @@ import {generate} from 'selfsigned';
  * @author Pablo Klaschka
  */
 export default class SWTServer {
-    private readonly publicKey: Secret;
+    /**
+     * The public key the server uses to decrypt a JWT payload token.
+     */
+    public readonly publicKey: Secret;
+    /**
+     * The private key the server uses to encrypt a JWT payload token.
+     */
     private readonly privateKey: Secret;
 
     constructor(private config: SWTServerConfig) {
