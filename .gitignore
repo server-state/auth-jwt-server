@@ -4,6 +4,6 @@ dist
 
 .idea
 .vscode
-*.js
+index.js
 *.d.ts
 *.js.map
