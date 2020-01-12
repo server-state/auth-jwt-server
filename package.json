@@ -1,6 +1,6 @@
 {
   "name": "@server-state/auth-jwt-server",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Basic JWT server for Server State servers",
   "main": "index.js",
   "types": "index.d.ts",
